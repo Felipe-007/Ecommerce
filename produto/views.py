@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
-from django.http import HttpResponse, request
+from django.http import HttpResponse
 from django.contrib import messages
 from . import models
-
-from pprint import pp, pprint
+from perfil.models import Perfil
 
 
 class ListaProdutos(ListView):
@@ -20,8 +19,7 @@ class DetalhePoduto(DetailView):
     model = models.Produto
     template_name = 'produto/detalhe.html'
     context_object_name = 'produto'
-    slug_url_kwarg = 'slug'
-    
+    slug_url_kwarg = 'slug'    
 
 
 class AdicionarAoCarrinho(View):
@@ -158,9 +156,25 @@ class ResumoDaCompra(View):
         if not self.request.user.is_authenticated:
             return redirect('perfil:criar')
 
+        perfil = Perfil.objects.filter(usuario=self.request.user).exists()
+
+        if not perfil:
+            messages.error(
+                self.request,
+                'Usuário sem perfil.'
+            )
+            return redirect('perfil:criar')
+
+        if not self.request.session.get('carrinho'):
+            messages.error(
+                self.request,
+                'Carrinho vazio.'
+            )
+            return redirect('produto:lista')
+
         contexto = {
             'usuario': self.request.user,
             'carrinho': self.request.session['carrinho'],
         }
-        
+
         return render(self.request, 'produto/resumodacompra.html', contexto)

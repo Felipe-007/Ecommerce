@@ -184,4 +184,4 @@ class Logout(View):
         self.request.session['carrinho'] = carrinho
         self.request.session.save()
 
-        return redirect('produto:lista') 
+        return redirect('produto:lista')

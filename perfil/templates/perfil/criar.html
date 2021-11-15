@@ -10,8 +10,7 @@
     {% if not request.user.is_authenticated %}
     <div class="col-lg mt-3">
         <h4>Login</h4>
-        <p>Se você já fez o cadastro, basta entrar com o seu usuário e senha abaixo:</p>
-        <br>
+        <p>Se você já fez o cadastro, basta entrar com o seu usuário e senha abaixo:</p>        
 
         <form method="POST" action="{% url 'perfil:login' %}">
             {% csrf_token %}
@@ -33,7 +32,7 @@
 
         {% block titulocadastro %}
         <h4>Cadastro</h4>
-        <p>Caso ainda não tenha cadastro, utilize o formulário a seguir para se cadastrar.</p>        
+        <p>Caso ainda não tenha cadastro, utilize o formulário a seguir:</p>        
         {% endblock %}
 
         <form method="POST" action="">
